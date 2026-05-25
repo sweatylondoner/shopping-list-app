@@ -5,7 +5,7 @@ import type { Store } from '@/lib/types';
 async function getStores(): Promise<Store[]> {
   const { data: stores, error: storesError } = await supabase
     .from('stores')
-    .select('id, name')
+    .select('*')
     .order('name');
 
   if (storesError) throw storesError;
