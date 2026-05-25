@@ -6,6 +6,7 @@ import ItemRow from './ItemRow';
 import SearchBar from './SearchBar';
 import SmartSuggestions from './SmartSuggestions';
 import AddItemModal from './AddItemModal';
+import OfflineBanner from './OfflineBanner';
 import type { ItemWithStatus, Store } from '@/lib/types';
 
 interface ShoppingListProps {
@@ -111,9 +112,12 @@ export default function ShoppingList({ store, initialItems }: ShoppingListProps)
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white min-h-screen">
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+    <>
+      <OfflineBanner />
+
+      <div className="max-w-md mx-auto bg-white min-h-screen">
+        {/* Header */}
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
         <div className="flex items-center p-4">
           <button
             onClick={() => router.push('/')}
@@ -194,6 +198,7 @@ export default function ShoppingList({ store, initialItems }: ShoppingListProps)
         onClose={() => setIsAddModalOpen(false)}
         onItemAdded={handleItemAdded}
       />
-    </div>
+      </div>
+    </>
   );
 }
