@@ -4,10 +4,10 @@ import type { ItemWithStatus } from '@/lib/types';
 
 export async function GET(
   request: Request,
-  { params }: { params: { storeId: string } }
+  context: { params: Promise<{ storeId: string }> }
 ) {
   try {
-    const { storeId } = params;
+    const { storeId } = await context.params;
     const { searchParams } = new URL(request.url);
     const mode = searchParams.get('mode') || 'all'; // 'all' or 'shopping'
 

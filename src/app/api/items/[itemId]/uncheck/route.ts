@@ -3,10 +3,10 @@ import { supabase } from '@/lib/supabase';
 
 export async function POST(
   request: Request,
-  { params }: { params: { itemId: string } }
+  context: { params: Promise<{ itemId: string }> }
 ) {
   try {
-    const { itemId } = params;
+    const { itemId } = await context.params;
     const { data, error } = await supabase
       .from('item_actions')
       .insert({

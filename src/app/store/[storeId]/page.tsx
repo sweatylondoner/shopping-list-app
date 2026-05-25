@@ -66,11 +66,10 @@ async function getItems(storeId: string): Promise<ItemWithStatus[]> {
   return itemsWithStatus;
 }
 
-export default async function StorePage({
-  params,
-}: {
-  params: { storeId: string };
+export default async function StorePage(props: {
+  params: Promise<{ storeId: string }>;
 }) {
+  const params = await props.params;
   const { storeId } = params;
   const [store, items] = await Promise.all([
     getStore(storeId),

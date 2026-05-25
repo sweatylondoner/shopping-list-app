@@ -3,10 +3,10 @@ import { supabase } from '@/lib/supabase';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { itemId: string } }
+  context: { params: Promise<{ itemId: string }> }
 ) {
   try {
-    const { itemId } = params;
+    const { itemId } = await context.params;
     const body = await request.json();
     const { isFavorite } = body;
 
