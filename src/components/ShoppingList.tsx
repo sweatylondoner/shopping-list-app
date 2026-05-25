@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import ItemRow from './ItemRow';
 import SearchBar from './SearchBar';
 import SmartSuggestions from './SmartSuggestions';
+import AddItemModal from './AddItemModal';
 import type { ItemWithStatus, Store } from '@/lib/types';
 
 interface ShoppingListProps {
@@ -17,6 +18,7 @@ export default function ShoppingList({ store, initialItems }: ShoppingListProps)
   const [items, setItems] = useState<ItemWithStatus[]>(initialItems);
   const [mode, setMode] = useState<'all' | 'shopping'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const filteredItems = useMemo(() => {
     let result = items;
@@ -104,6 +106,10 @@ export default function ShoppingList({ store, initialItems }: ShoppingListProps)
     await handleToggle(itemId, true);
   };
 
+  const handleItemAdded = () => {
+    router.refresh();
+  };
+
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen">
       {/* Header */}
@@ -154,7 +160,7 @@ export default function ShoppingList({ store, initialItems }: ShoppingListProps)
       )}
 
       {/* Items List */}
-      <div>
+      <div className="pb-24">
         {filteredItems.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             {searchQuery ? 'No items match your search' : 'No items yet. Tap + to add one.'}
@@ -174,12 +180,20 @@ export default function ShoppingList({ store, initialItems }: ShoppingListProps)
       {/* Add Item Button - Fixed at bottom */}
       <div className="fixed bottom-6 right-6">
         <button
-          onClick={() => {/* We'll implement this in next task */}}
+          onClick={() => setIsAddModalOpen(true)}
           className="w-14 h-14 bg-primary-600 text-white rounded-full shadow-lg text-3xl flex items-center justify-center hover:bg-primary-700"
         >
           +
         </button>
       </div>
+
+      {/* Add Item Modal */}
+      <AddItemModal
+        storeId={store.id}
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onItemAdded={handleItemAdded}
+      />
     </div>
   );
 }
