@@ -1,36 +1,67 @@
 import ShoppingList from '@/components/ShoppingList';
+import { supabase } from '@/lib/supabase';
 import type { Store, ItemWithStatus } from '@/lib/types';
 
 async function getStore(storeId: string): Promise<Store> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/stores`, { cache: 'no-store' });
+  const { data: store, error } = await supabase
+    .from('stores')
+    .select('*')
+    .eq('id', storeId)
+    .single();
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch stores');
-  }
-
-  const stores: Store[] = await res.json();
-  const store = stores.find(s => s.id === storeId);
-
-  if (!store) {
+  if (error || !store) {
     throw new Error('Store not found');
   }
 
-  return store;
+  return { ...store, uncheckedCount: 0 };
 }
 
 async function getItems(storeId: string): Promise<ItemWithStatus[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/stores/${storeId}/items`, {
-    cache: 'no-store',
-  });
+  const { data: items, error: itemsError } = await supabase
+    .from('items')
+    .select('*')
+    .eq('store_id', storeId)
+    .order('name');
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch items');
+  if (itemsError) throw itemsError;
+
+  if (!items || items.length === 0) {
+    return [];
   }
 
-  const data = await res.json();
-  return data.items;
+  const itemIds = items.map(item => item.id);
+
+  const { data: actions, error: actionsError } = await supabase
+    .from('item_actions')
+    .select('*')
+    .in('item_id', itemIds)
+    .order('timestamp', { ascending: false });
+
+  if (actionsError) throw actionsError;
+
+  const latestActionMap = new Map<string, { action: string; timestamp: string }>();
+  (actions || []).forEach(action => {
+    if (!latestActionMap.has(action.item_id)) {
+      latestActionMap.set(action.item_id, {
+        action: action.action,
+        timestamp: action.timestamp,
+      });
+    }
+  });
+
+  const itemsWithStatus: ItemWithStatus[] = items.map(item => {
+    const latestAction = latestActionMap.get(item.id);
+    const isChecked = latestAction?.action === 'checked';
+    const lastChecked = isChecked ? latestAction.timestamp : null;
+
+    return {
+      ...item,
+      isChecked,
+      lastChecked,
+    };
+  });
+
+  return itemsWithStatus;
 }
 
 export default async function StorePage({
