@@ -4,9 +4,10 @@ import type { ItemWithStatus } from '@/lib/types';
 
 export async function GET(
   request: Request,
-  { params }: { params: { storeId: string } }
+  { params }: { params: Promise<{ storeId: string }> }
 ) {
   try {
+    const { storeId } = await params;
     const { searchParams } = new URL(request.url);
     const mode = searchParams.get('mode') || 'all'; // 'all' or 'shopping'
 
@@ -14,7 +15,7 @@ export async function GET(
     const { data: items, error: itemsError } = await supabase
       .from('items')
       .select('*')
-      .eq('store_id', params.storeId)
+      .eq('store_id', storeId)
       .order('name');
 
     if (itemsError) throw itemsError;

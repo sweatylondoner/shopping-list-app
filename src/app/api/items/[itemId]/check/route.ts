@@ -3,13 +3,14 @@ import { supabase } from '@/lib/supabase';
 
 export async function POST(
   request: Request,
-  { params }: { params: { itemId: string } }
+  { params }: { params: Promise<{ itemId: string }> }
 ) {
   try {
+    const { itemId } = await params;
     const { data, error } = await supabase
       .from('item_actions')
       .insert({
-        item_id: params.itemId,
+        item_id: itemId,
         action: 'checked',
       })
       .select()

@@ -3,9 +3,10 @@ import { supabase } from '@/lib/supabase';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { itemId: string } }
+  { params }: { params: Promise<{ itemId: string }> }
 ) {
   try {
+    const { itemId } = await params;
     const body = await request.json();
     const { isFavorite } = body;
 
@@ -19,7 +20,7 @@ export async function PATCH(
     const { data, error } = await supabase
       .from('items')
       .update({ is_favorite: isFavorite })
-      .eq('id', params.itemId)
+      .eq('id', itemId)
       .select()
       .single();
 

@@ -4,14 +4,15 @@ import type { Suggestion } from '@/lib/types';
 
 export async function GET(
   request: Request,
-  { params }: { params: { storeId: string } }
+  { params }: { params: Promise<{ storeId: string }> }
 ) {
   try {
+    const { storeId } = await params;
     // Get all items for this store
     const { data: items, error: itemsError } = await supabase
       .from('items')
       .select('*')
-      .eq('store_id', params.storeId);
+      .eq('store_id', storeId);
 
     if (itemsError) throw itemsError;
 
