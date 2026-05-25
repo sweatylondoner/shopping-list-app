@@ -55,11 +55,26 @@ async function getStores(): Promise<Store[]> {
 }
 
 export default async function Home() {
-  const stores = await getStores();
+  try {
+    const stores = await getStores();
 
-  return (
-    <div className="py-8">
-      <StoreSelector stores={stores} />
-    </div>
-  );
+    return (
+      <div className="py-8">
+        <StoreSelector stores={stores} />
+      </div>
+    );
+  } catch (error: any) {
+    return (
+      <div className="p-8 max-w-md mx-auto">
+        <h1 className="text-2xl font-bold text-red-600 mb-4">Error Loading App</h1>
+        <p className="mb-4">Failed to connect to database.</p>
+        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+          {error?.message || String(error)}
+        </pre>
+        <p className="mt-4 text-sm text-gray-600">
+          Check that environment variables are set correctly in Vercel.
+        </p>
+      </div>
+    );
+  }
 }
