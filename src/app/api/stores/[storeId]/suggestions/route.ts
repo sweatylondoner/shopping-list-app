@@ -4,10 +4,10 @@ import type { Suggestion } from '@/lib/types';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ storeId: string }> }
+  { params }: { params: { storeId: string } }
 ) {
   try {
-    const { storeId } = await params;
+    const { storeId } = params;
     // Get all items for this store
     const { data: items, error: itemsError } = await supabase
       .from('items')

@@ -69,9 +69,9 @@ async function getItems(storeId: string): Promise<ItemWithStatus[]> {
 export default async function StorePage({
   params,
 }: {
-  params: Promise<{ storeId: string }>;
+  params: { storeId: string };
 }) {
-  const { storeId } = await params;
+  const { storeId } = params;
   const [store, items] = await Promise.all([
     getStore(storeId),
     getItems(storeId),
