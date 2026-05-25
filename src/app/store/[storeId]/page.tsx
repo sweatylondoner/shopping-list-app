@@ -2,6 +2,8 @@ import ShoppingList from '@/components/ShoppingList';
 import { supabase } from '@/lib/supabase';
 import type { Store, ItemWithStatus } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 async function getStore(storeId: string): Promise<Store> {
   const { data: store, error } = await supabase
     .from('stores')

@@ -2,6 +2,8 @@ import StoreSelector from '@/components/StoreSelector';
 import { supabase } from '@/lib/supabase';
 import type { Store } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 async function getStores(): Promise<Store[]> {
   const { data: stores, error: storesError } = await supabase
     .from('stores')
