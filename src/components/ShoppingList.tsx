@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import ItemRow from './ItemRow';
 import SearchBar from './SearchBar';
+import SmartSuggestions from './SmartSuggestions';
 import type { ItemWithStatus, Store } from '@/lib/types';
 
 interface ShoppingListProps {
@@ -99,6 +100,10 @@ export default function ShoppingList({ store, initialItems }: ShoppingListProps)
     }
   };
 
+  const handleSuggestionClick = async (itemId: string) => {
+    await handleToggle(itemId, true);
+  };
+
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen">
       {/* Header */}
@@ -139,6 +144,14 @@ export default function ShoppingList({ store, initialItems }: ShoppingListProps)
 
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
       </div>
+
+      {/* Smart Suggestions */}
+      {mode === 'shopping' && !searchQuery && (
+        <SmartSuggestions
+          storeId={store.id}
+          onSuggestionClick={handleSuggestionClick}
+        />
+      )}
 
       {/* Items List */}
       <div>
