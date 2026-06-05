@@ -19,67 +19,80 @@ export default function StoreSelector({ stores, currentStoreId }: StoreSelectorP
   };
 
   if (!currentStoreId) {
-    // Home page view - show all stores
+    // Home page view - GKR2 style
     return (
-      <div className="max-w-md mx-auto min-h-screen bg-cream-50">
+      <div className="max-w-md mx-auto min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="bg-white px-6 pt-8 pb-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 rounded-full bg-primary-500 flex items-center justify-center text-white text-xl">
-              👤
+        <div className="bg-white px-6 pt-6 pb-6 rounded-b-3xl">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
+                <span className="w-full h-full flex items-center justify-center text-xl">👤</span>
+              </div>
+              <span className="text-xl font-bold text-brown-800">Ghar Ki Rasoi</span>
             </div>
-            <h1 className="text-2xl font-bold text-brown-800">My Shopping Lists</h1>
+            <button className="w-8 h-8 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="10" cy="10" r="3" />
+                <path d="M10 1v2M10 17v2M18.66 5.34l-1.41 1.41M3.34 14.66l1.41 1.41M19 10h-2M3 10H1M18.66 14.66l-1.41-1.41M3.34 5.34l1.41 1.41" />
+              </svg>
+            </button>
           </div>
-        </div>
 
-        {/* Stores Grid */}
-        <div className="p-6">
-          <h2 className="text-lg font-semibold text-brown-800 mb-4">Grocery Lists</h2>
-          <p className="text-sm text-gray-600 mb-4">Quick toggle between your regular stores</p>
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-primary-700 mb-1">Grocery Lists</h1>
+              <p className="text-sm text-gray-600">Quick toggle between your regular stores</p>
+            </div>
+            <button className="px-4 py-2 rounded-full border border-primary-300 text-primary-700 text-sm font-medium hover:bg-primary-50">
+              Clear Completed
+            </button>
+          </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          {/* Store Tabs */}
+          <div className="flex gap-2 mt-4">
             {stores.map((store) => (
               <button
                 key={store.id}
                 onClick={() => handleStoreClick(store.id)}
-                className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow min-h-touch-target flex flex-col items-center justify-center gap-2"
+                className={`px-4 py-2 rounded-xl font-medium text-sm transition-all ${
+                  store.id === selectedStore
+                    ? 'bg-primary-500 text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-700'
+                }`}
               >
-                <span className="text-2xl">🏪</span>
-                <span className="text-sm font-medium text-gray-800 text-center">
-                  {store.name}
-                </span>
-                {store.uncheckedCount !== undefined && store.uncheckedCount > 0 && (
-                  <span className="text-xs px-2 py-0.5 bg-primary-100 text-primary-700 rounded-full font-medium">
-                    {store.uncheckedCount}
-                  </span>
-                )}
+                {store.name}
               </button>
             ))}
           </div>
+        </div>
+
+        {/* This will be replaced by the actual grocery list content */}
+        <div className="p-4">
+          <p className="text-center text-gray-500 py-8">Select a store to view items</p>
         </div>
       </div>
     );
   }
 
-  // In-app store switcher (tabs)
+  // In-store view header with tabs
   return (
-    <div className="flex gap-2 overflow-x-auto px-4 py-3 bg-white border-b border-gray-200 scrollbar-hide">
-      {stores.map((store) => (
-        <button
-          key={store.id}
-          onClick={() => handleStoreClick(store.id)}
-          className={`px-4 py-2 rounded-full font-medium whitespace-nowrap transition-colors ${
-            store.id === selectedStore
-              ? 'bg-primary-500 text-white'
-              : 'bg-cream-100 text-gray-700 hover:bg-cream-200'
-          }`}
-        >
-          {store.name}
-          {store.uncheckedCount !== undefined && store.uncheckedCount > 0 && (
-            <span className="ml-2">({store.uncheckedCount})</span>
-          )}
-        </button>
-      ))}
+    <div className="bg-white px-4 py-3 border-b border-gray-200">
+      <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+        {stores.map((store) => (
+          <button
+            key={store.id}
+            onClick={() => handleStoreClick(store.id)}
+            className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
+              store.id === selectedStore
+                ? 'bg-primary-500 text-white'
+                : 'bg-gray-100 text-gray-700'
+            }`}
+          >
+            {store.name}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

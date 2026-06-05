@@ -181,6 +181,7 @@
   },
   "active": "e2ba8a4f07ec361a",
   "lastOpenFiles": [
+    "FULL-GKR-DEPLOYMENT.md",
     "src/components/MealPlanner.tsx",
     "src/app/planner/page.tsx",
     "src/app/planner",
@@ -191,7 +192,6 @@
     "src/app/inventory/page.tsx",
     "src/app/inventory",
     "src/components/BottomNav.tsx",
-    "supabase/migration-full-gkr-app.sql",
     "AGENTS.md",
     "CLAUDE.md",
     "DEPLOY-CHECKLIST.md",
