@@ -6,10 +6,10 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Shopping Lists",
-  description: "Manage shopping lists for Indian Store, Sainsbury's, and Costco",
+  title: "Ghar Ki Rasoi - Shopping Lists",
+  description: "Manage your grocery shopping lists with style",
   manifest: "/manifest.json",
-  themeColor: "#0ea5e9",
+  themeColor: "#f2724d",
   viewport: {
     width: "device-width",
     initialScale: 1,
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main className="min-h-screen bg-gray-50">
+        <main className="min-h-screen bg-cream-50">
           {children}
         </main>
 

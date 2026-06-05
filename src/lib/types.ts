@@ -13,6 +13,12 @@ export interface Item {
   created_at: string;
   isChecked?: boolean;
   lastChecked?: string | null;
+  category?: string;
+  quantity?: number;
+  unit?: string;
+  image_url?: string;
+  stock_status?: 'ok' | 'low' | 'out';
+  notes?: string;
 }
 
 export interface ItemAction {

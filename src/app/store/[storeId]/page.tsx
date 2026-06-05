@@ -66,15 +66,26 @@ async function getItems(storeId: string): Promise<ItemWithStatus[]> {
   return itemsWithStatus;
 }
 
+async function getAllStores(): Promise<Store[]> {
+  const { data: stores, error } = await supabase
+    .from('stores')
+    .select('*')
+    .order('name');
+
+  if (error) throw error;
+  return stores || [];
+}
+
 export default async function StorePage(props: {
   params: Promise<{ storeId: string }>;
 }) {
   const params = await props.params;
   const { storeId } = params;
-  const [store, items] = await Promise.all([
+  const [store, items, allStores] = await Promise.all([
     getStore(storeId),
     getItems(storeId),
+    getAllStores(),
   ]);
 
-  return <ShoppingList store={store} initialItems={items} />;
+  return <ShoppingList store={store} initialItems={items} allStores={allStores} />;
 }
